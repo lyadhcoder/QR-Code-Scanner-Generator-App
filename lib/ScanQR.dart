@@ -17,8 +17,10 @@ class _ScanQRState extends State<ScanQR> {
     return Hero(
       tag: "ScanQR",
       child: Scaffold(
+        backgroundColor: Color(0xFF5F39B3),
         appBar: AppBar(
-          title: Text("QR Scanner"),
+          backgroundColor: Color(4290028543),
+          title: Text("QR Scanner", style: TextStyle(color: Colors.black)),
         ),
         body: Container(
           width: double.infinity,
@@ -35,6 +37,7 @@ class _ScanQRState extends State<ScanQR> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 22,
+                      color: Colors.white,
                     ),
                   )),
                   IconButton(
@@ -42,6 +45,7 @@ class _ScanQRState extends State<ScanQR> {
                     onPressed: hasdata
                         ? () async {
                             if (await canLaunch(qrData)) {
+                              print(qrData);
                               await launch(qrData);
                             } else {
                               throw "Could Not Launch";
