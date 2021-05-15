@@ -1,4 +1,6 @@
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ScanQR extends StatefulWidget {
   @override
@@ -30,10 +32,53 @@ class _ScanQRState extends State<ScanQR> {
                   Flexible(
                       child: Text(
                     "Raw Data: ${(qrData)}",
-                    style: TextStyle(fontSize: 22),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 22,
+                    ),
                   )),
+                  IconButton(
+                    icon: Icon(Icons.launch_outlined),
+                    onPressed: hasdata
+                        ? () async {
+                            if (await canLaunch(qrData)) {
+                              await launch(qrData);
+                            } else {
+                              throw "Could Not Launch";
+                            }
+                          }
+                        : null,
+                  ),
                 ],
-              )
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                width: ((MediaQuery.of(context).size.width) / 2) - 45,
+                height: 30,
+                child: OutlineButton(
+                  focusColor: Colors.red[600],
+                  highlightColor: Colors.red[400],
+                  hoverColor: Colors.red,
+                  splashColor: Colors.orange,
+                  borderSide: BorderSide(width: 1, color: Colors.white),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18)),
+                  child: Text(
+                    "Scan QR",
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                  onPressed: () async {
+                    var option = ScanOptions(autoEnableFlash: true);
+                    data = await BarcodeScanner.scan(options: option);
+                    setState(() {
+                      qrData = data.rawContent.toString();
+                      hasdata = true;
+                    });
+                  },
+                ),
+              ),
             ],
           ),
         ),
